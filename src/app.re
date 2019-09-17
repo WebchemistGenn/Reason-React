@@ -1,21 +1,15 @@
-[%bs.raw {|require('./app.css')|}];
+/* app.re */
 
-[@bs.module] external logo : string = "./logo.svg";
+[@react.component]
+let make = () => {
+  let url = ReasonReactRouter.useUrl();
 
-let component = ReasonReact.statelessComponent("App");
+  let view =
+    switch (url.path) {
+    | [] => <Home />
+    | ["about"] => <About />
+    | _ => <div> {"Page not found :/" |> ReasonReact.string} </div>
+    };
 
-let make = (~message, _children) => {
-  ...component,
-  render: _self =>
-    <div className="App">
-      <div className="App-header">
-        <img src=logo className="App-logo" alt="logo" />
-        <h2> (ReasonReact.string(message)) </h2>
-      </div>
-      <p className="App-intro">
-        (ReasonReact.string("To get started, edit"))
-        <code> (ReasonReact.string(" src/app.re ")) </code>
-        (ReasonReact.string("and save to reload."))
-      </p>
-    </div>,
+  <div> <Header title="Reason React TodoList" /> <div> view </div> </div>;
 };
